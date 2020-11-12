@@ -1,27 +1,25 @@
-import java.time.LocalDate;
-import java.time.Period;
-
 public class Employee {
     private String fio;
     private String post;
     private String phone;
     private double salary;
-    private static LocalDate birthday;
-    private static LocalDate today;
+    private int birthday;
+    private int today = 2020;
     private int id;
     private static int nextId=1;
     private static Employee[] empArr = new Employee[5];
-
-    public Employee(String n, String job, String number, double s, int year, int month, int day)
+    public static Employee[] getEmployeesArr() { return empArr;}
+    public Employee(String n, String job, String number, double s, int year)
     {
         this.id = nextId++;
         fio = n;
         post=job;
         phone=number;
         salary = s;
-        birthday = LocalDate.of(year, month, day);
+        birthday = year;
         empArr[id]=this;
     }
+
     public int getId() {
         return id;
     }
@@ -40,17 +38,17 @@ public class Employee {
         return salary;
     }
 
-    public void setBirthday(LocalDate aBirthDate)
+    public void setBirthday(int aBirthDate)
     {
         this.birthday = aBirthDate;
 
     }
-    public LocalDate getBirthday(){
+    public int getBirthday(){
         return birthday;
     }
-    public  int calculateAge(LocalDate birthDate, LocalDate currentDate){
-        if((birthDate !=null) && (currentDate != null)) {
-            return Period.between(birthDate, currentDate).getYears();
+    public  int calculateAge(){
+        if(birthday > 0) {
+            return today - birthday;
         } else {
             return 0;
         }
@@ -59,7 +57,7 @@ public class Employee {
     public static float getAvgAge(Employee[] emp) {
         int avAge = 0;
         for(int i = 0; i<emp.length; i++)
-            avAge+=emp[i].calculateAge(birthday,today);
+            avAge+=emp[i].calculateAge();
         return avAge/(float)emp.length;
     }
 
@@ -69,10 +67,10 @@ public class Employee {
             avgSalary+=emp[i].getSalary();
         return avgSalary/(float)emp.length;
     }
-    public void raiseSalary()
+    public static void raiseSalary()
     {
         for(int i = 0; i<empArr.length; i++) {
-            if(empArr[i] != null && empArr[i].calculateAge(birthday,today) >45)
+            if(empArr[i] != null && empArr[i].calculateAge() >45)
                 empArr[i].salary +=5000;
         }
     }
